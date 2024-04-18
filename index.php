@@ -1,4 +1,34 @@
+<?php
+if (isset($_GET['day']) && isset($_GET['month']) && isset($_GET['year'])) {
+    $day = $_GET['day'];
+    $month = $_GET['month'];
+    $year = $_GET['year'];
 
+    // Create a date  in the format 'YYYY-MM-DD'
+    $birthday = "$year-$month-$day";
+
+    $currentDate = new DateTime();
+
+    // this years birthday date
+    $birthdaydate = new DateTime(date('Y') . '-' . $month . '-' . $day);
+
+    // if birthday day already happened than calculate For next Year
+    if ($currentDate > $birthdaydate) {
+        // change year to next year
+        $nextBirthdayYear = date('Y') + 1;
+        // next years birthday date
+        $birthdaydate = new DateTime($nextBirthdayYear . '-' . $month . '-' . $day);
+    }
+
+    // Calculate the difference between the current date and the next birthday date
+    $interval = $currentDate->diff($birthdaydate);
+
+    // calculate the years, months and days
+    $years = $interval->y;
+    $months = $interval->m;
+    $days = $interval->d;
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -32,18 +62,18 @@
                 </div>
                 <form action="index.php" method="get">
                 <div class="flex p-4 opacity-[70]">
-                    <input type="number" placeholder="DD" id="day" class="border px-2 font-bold mx-2" max="30">
-                    <input type="number" placeholder="MM" id="month" class="border p-4 font-bold mx-2" max="12">
-                    <input type="number" placeholder="YYYY" id="year" class="border p-4 font-bold mx-2">
+                    <input type="number" placeholder="DD" value="<?php echo isset($day) ? $day : ''; ?>" name="day" class="border px-2 font-bold mx-2" max="30">
+                    <input type="number" placeholder="MM" value="<?php echo isset($month) ? $month : ''; ?>"  name="month" class="border p-4 font-bold mx-2" max="12">
+                    <input type="number" placeholder="YYYY" value="<?php echo isset($year) ? $year : ''; ?>" name="year" class="border p-4 font-bold mx-2">
                 </div>
                 <button type="submit" class="absolute top-[30%] left-[80%] rounded-full bg-pink-500 text-white p-2 w-[7rem] h-[7rem] flex items-center justify-center hover:bg-black">
                     <i class="fa-solid fa-arrow-down text-white text-xl"></i>
                 </button>
                 </form>
                 <div class="text-9xl mt-8">
-                    <h1><span class="text-[#8550ED] ">0</span>Years</h1>
-                    <h1><span class="text-[#8550ED] text-9xl">0</span>Months</h1>
-                    <h1><span class="text-[#8550ED] text-9xl">0</span>Days</h1>
+                    <h1><span class="text-[#8550ED]" ><?php if(isset($years)) echo $years; else echo "0"?></span>Year</h1>
+                    <h1><span class="text-[#8550ED] text-9xl"><?php if(isset($months)) echo $months; else echo "0"?></span>Month</h1>
+                    <h1><span class="text-[#8550ED] text-9xl" ><?php if(isset($days)) echo $days; else echo "0"?></span>Day</h1>
                 </div>
             </div>
 
